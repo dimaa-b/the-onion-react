@@ -1,14 +1,16 @@
 import './App.css';
+import '@fontsource/inter';
 import { useState, useEffect } from 'react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import cheerio from 'cheerio'
+import * as React from 'react';
+import ArticleCard from './components/ArticleCard';
 function App() {
   const [articles, setArticleData] = useState([]);
-  const [response, setResponse] = useState(''); // Not used in this version
 
   useEffect(() => {
     const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    // prevent blocking, since some of this content may get flagged
     model.safetySettings = [
       { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
       {
@@ -20,7 +22,7 @@ function App() {
         category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
         threshold: 'BLOCK_NONE'
       }
-      ]
+    ]
 
     const prompt = "Write three short satirical news articles with the following structure: headline: A catchy, attention-grabbing title. body: 2-3 paragraphs of humorous and exaggerated news content, mocking current events, politics, or pop culture. It should be formed like this, ### **{title}** {content} ### **{title}** {content} ### **{title}** {content}";
 
@@ -48,19 +50,21 @@ function App() {
       articles.push({ title, body });
     }
 
-    return articles;
+    return articles.filter(article => article.title && article.body);
   }
 
 
   return (
     <div>
       <h1>AI Generated Stories</h1>
-      {articles.map((article, index) => (
-        <article key={index}>
-          <h2>{article.title}</h2>
-          <p>{article.content}</p>
-        </article>
-      ))}
+      <div className='flex flex-row'>
+        {articles.map((article, index) => {
+          console.log(article)
+          return (
+            <ArticleCard key={index} articleData={article} />
+          )
+        })}
+      </div>
     </div>
   );
 }
