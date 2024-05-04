@@ -5,15 +5,31 @@ import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import IconButton from '@mui/joy/IconButton';
 import Typography from '@mui/joy/Typography';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { search_for_image } from '../helpers/common';
 
 export default function ArticleCard({ articleData }) {
+    const [image, setImage] = useState('');
+    useEffect(() => {
+        // when component is mounted
+        // if articleData.imageDescription is not empty, search for image and if mainTag is not undefined
+        // then search for image with mainTag
+        if (image === '') {
+            console.log(articleData)
+            if (articleData.imageDescription && articleData.mainTag) {
+                search_for_image(articleData.imageDescription).then((data) => {
+                    setImage(data);
+                });
+            } 
+        }
+        
+    }   )
+
     return (
         <Card sx={{ width: 320 }}>
             <AspectRatio minHeight="120px" maxHeight="200px">
                 <img
-                    src="https://images.unsplash.com/photo-1527549993586-dff825b37782?auto=format&fit=crop&w=286"
-                    srcSet="https://images.unsplash.com/photo-1527549993586-dff825b37782?auto=format&fit=crop&w=286&dpr=2 2x"
+                    src={image}
                     loading="lazy"
                     alt=""
                 />
