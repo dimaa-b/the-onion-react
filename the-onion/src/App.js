@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import * as React from 'react';
 import ArticleCard from './components/ArticleCard';
+import ArticleView from './components/ArticleView';
 function App() {
   const [articles, setArticleData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [openedArticle, setOpenedArticle] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -65,12 +67,10 @@ function App() {
     <div>
       <h1>AI Generated Stories</h1>
       <div className='flex flex-row'>
-        {articles.map((article, index) => {
-          console.log(article)
-          return (
-            <ArticleCard key={index} articleData={article} />
-          )
-        })}
+        {!openedArticle ? 
+        articles.map((article, index) => (<ArticleCard key={index} articleData={article} setViewArticle={setOpenedArticle} />)):
+        <ArticleView selectedArticle={openedArticle} />
+        }
       </div>
     </div>
   );

@@ -1,18 +1,21 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-export default async function ArticleView({ title, tags, description }) {
+export default function ArticleView({ selectedArticle }) {
     // track how much time a user spends on a certain article
-    const [startTime, setStartTime] = React.useState(Date.now());
+    const [startTime, setStartTime] = useState(Date.now());
 
     useEffect(() => {
-        const endTime = Date.now();
-        const timeSpent = endTime - startTime;
-        console.log(`Time spent on article: ${timeSpent}ms`);
-
         return () => {
-            console.log('ArticleCard unmounted');
-        };
+            const endTime = Date.now();
+            const timeSpent = endTime - startTime;
+            console.log(`User spent ${timeSpent}ms on this article`);
+        }
     }, []);
 
-    // The article will be generated on the fly. 
+    return (
+        <div>
+            <h1>{selectedArticle.title}</h1>
+            <p>{selectedArticle.body}</p>
+        </div>
+    );
 }

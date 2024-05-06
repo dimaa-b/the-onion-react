@@ -8,12 +8,9 @@ import Typography from '@mui/joy/Typography';
 import { useEffect, useState } from 'react';
 import { search_for_image } from '../helpers/common';
 
-export default function ArticleCard({ articleData }) {
+export default function ArticleCard({ articleData, setViewArticle, key }) {
     const [image, setImage] = useState('');
     useEffect(() => {
-        // when component is mounted
-        // if articleData.imageDescription is not empty, search for image and if mainTag is not undefined
-        // then search for image with mainTag
         if (image === '') {
             console.log(articleData)
             if (articleData.imageDescription && articleData.mainTag) {
@@ -38,6 +35,7 @@ export default function ArticleCard({ articleData }) {
                 <Typography level="title-lg">{articleData.title}</Typography>
                 {/* <Typography level="body-sm">April 24 to May 02, 2021</Typography> */}
             </div>
+            <Button onClick={() => setViewArticle(key)}>Read More</Button>
         </Card>
     )
 }
