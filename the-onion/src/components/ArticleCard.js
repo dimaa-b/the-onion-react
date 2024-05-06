@@ -2,13 +2,11 @@ import * as React from 'react';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Button from '@mui/joy/Button';
 import Card from '@mui/joy/Card';
-import CardContent from '@mui/joy/CardContent';
-import IconButton from '@mui/joy/IconButton';
 import Typography from '@mui/joy/Typography';
 import { useEffect, useState } from 'react';
 import { search_for_image } from '../helpers/common';
 
-export default function ArticleCard({ articleData, setViewArticle, key }) {
+export default function ArticleCard({ articleData, setViewArticle, index }) {
     const [image, setImage] = useState('');
     useEffect(() => {
         if (image === '') {
@@ -33,9 +31,8 @@ export default function ArticleCard({ articleData, setViewArticle, key }) {
             </AspectRatio>
             <div>
                 <Typography level="title-lg">{articleData.title}</Typography>
-                {/* <Typography level="body-sm">April 24 to May 02, 2021</Typography> */}
             </div>
-            <Button onClick={() => setViewArticle(key)}>Read More</Button>
+            <Button onClick={() => setViewArticle(index)}>Read More</Button>
         </Card>
     )
 }
