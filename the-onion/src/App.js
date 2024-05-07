@@ -3,6 +3,7 @@ import '@fontsource/inter';
 import { useState, useEffect } from 'react';
 import { processArticles } from './helpers/common';
 import { generateArticles } from './helpers/gemini';
+import { StrictMode } from 'react';
 
 import ArticleCard from './components/ArticleCard';
 import ArticleView from './components/ArticleView';
@@ -38,7 +39,7 @@ function App() {
   if (openedArticle === null) {
     display = articles.map((article, index) => (<ArticleCard index={index} articleData={article} setViewArticle={onArticleClick}/>))
   } else{
-    display = <ArticleView selectedArticle={articles[openedArticle]} setArticleView={onArticleClick} />
+    display = <StrictMode disabled><ArticleView selectedArticle={articles[openedArticle]} setArticleView={onArticleClick} /></StrictMode>
   }
 
   return (

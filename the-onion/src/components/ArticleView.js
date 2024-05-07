@@ -1,11 +1,24 @@
 import { useEffect, useState } from "react";
+import { generateArticleContent } from "../helpers/gemini";
 import '../index.css';
 
 export default function ArticleView({ selectedArticle, setArticleView }) {
   // Time tracking
   const [startTime, setStartTime] = useState(Date.now());
+  const [articleContent, setArticleContent] = useState(null);
 
   useEffect(() => {
+    const result = generateArticleContent(selectedArticle.title);
+    if (!result) return;
+    result.then(async (result) => {
+      let currentArticle = '';
+      for await (const chunk of result.stream) {
+        currentArticle += chunk.text();
+        setArticleContent(currentArticle);
+      }
+    });
+
+
     setStartTime(Date.now());
     return () => {
       const endTime = Date.now();
@@ -21,11 +34,7 @@ export default function ArticleView({ selectedArticle, setArticleView }) {
         <h1 className="text-4xl font-bold">{selectedArticle.title}</h1>
       </div>
       <div className="leading-relaxed text-gray-800">
-        {selectedArticle.body.split("\n").map((paragraph, index) => (
-          <p key={index} className="mb-4">
-            {paragraph}
-          </p>
-        ))}
+        {articleContent}
       </div>
       <div className="mt-8">
         <button
